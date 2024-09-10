@@ -1,42 +1,10 @@
-import Link from "next/link";
+import AuthButton from "../components/AuthButton";
 
 export default function Home() {
   return (
-    <main>
-      <h1>Next.js 14 app router</h1>
-      <h2>Choose a flow to test:</h2>
-      <h3>Client-Side Flows:</h3>
-      <div>
-        <Link href="/flow/page1/page2/page3">
-          <button>Flow 1: Page 1 -&gt; Page 2 -&gt; Page 3</button>
-        </Link>
-      </div>
-      <div>
-        <Link href="/flow/page2/page3">
-          <button>Flow 2: Page 2 -&gt; Page 3</button>
-        </Link>
-      </div>
-      <div>
-        <Link href="/flow/page1/page3">
-          <button>Flow 3: Page 1 -&gt; Page 3</button>
-        </Link>
-      </div>
-      <h3>Server-Side Flows:</h3>
-      <div>
-        <Link href="/server-flow/page1/page2/page3">
-          <button>Server Flow 1: Page 1 -&gt; Page 2 -&gt; Page 3</button>
-        </Link>
-      </div>
-      <div>
-        <Link href="/server-flow/page2/page3">
-          <button>Server Flow 2: Page 2 -&gt; Page 3</button>
-        </Link>
-      </div>
-      <div>
-        <Link href="/server-flow/page1/page3">
-          <button>Server Flow 3: Page 1 -&gt; Page 3</button>
-        </Link>
-      </div>
+    <main className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Welcome to My App</h1>
+      <AuthButton />
     </main>
   );
 }

@@ -2,6 +2,30 @@ import { AuthOptions } from "next-auth";
 import Auth0Provider from "next-auth/providers/auth0";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+async function exchangeAuth0Token(token: string) {
+  try {
+    const response = await fetch(
+      `${process.env.BACKEND_URL}/auth/exchange-auth0-token`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Token exchange failed");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Token exchange error:", error);
+    return null;
+  }
+}
+
 export const authOptions: AuthOptions = {
   providers: [
     Auth0Provider({
@@ -56,18 +80,22 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async jwt({ token, account, user }) {
-      if (account) {
+      if (account && account.provider === "auth0") {
         // This is for Auth0
-        token.accessToken = account.access_token;
-        token.provider = account.provider;
-      }
-      if (user) {
+        const exchangedToken = await exchangeAuth0Token(
+          account.access_token as string
+        );
+        if (exchangedToken) {
+          token.accessToken = exchangedToken.accessToken;
+        } else {
+          token.accessToken = account.access_token;
+        }
+        token.provider = "auth0";
+      } else if (user) {
         // This is for CredentialsProvider
         token.id = user.id;
-        if (user.accessToken) {
-          token.accessToken = user.accessToken;
-          token.provider = "credentials";
-        }
+        token.accessToken = user.accessToken;
+        token.provider = "credentials";
       }
       return token;
     },

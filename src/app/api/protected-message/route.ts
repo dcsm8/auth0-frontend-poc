@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth/next";
 import axios from "axios";
 import { authOptions } from "../auth/auth-options";
 
-const backendUrl = "http://localhost:3001";
+const backendUrl = process.env.BACKEND_URL;
 
 export async function GET(req: NextRequest) {
   try {
